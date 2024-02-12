@@ -1,0 +1,37 @@
+
+.cr-range-box {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    color: #E61E4D;
+    /* color: linear-gradient(to right,#E61E4D 0%,#E31C5F 50%,#D70466 100%); */
+    height: 4px;
+    border-radius: 12px;
+    padding: 20px 0;
+    cursor: pointer;
+}
+
+.cr-range-track {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: inherit;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0.4;
+}
+
+.cr-range-progress {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: currentColor;
+    height: inherit;
+    border-radius: inherit;
+    border: 1px solid currentColor;
+}
+
+.cr-range-thumb {
+    display: none;
+}
