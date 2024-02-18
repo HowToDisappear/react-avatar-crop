@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import Range from './Range';
 import useDrag from './useDrag';
+import { Displacement } from './common';
 
 
 const EditArea = ({
@@ -53,6 +54,12 @@ const EditArea = ({
         }
 
         imgRect.current = imgRef.current.getBoundingClientRect();
+
+        // temporary solution
+        imgRef.current.style['width'] = `${imgRect.current.width}px`;
+        imgRef.current.style['height'] = `${imgRect.current.height}px`;
+        imgRef.current.style['maxWidth'] = 'unset';
+        imgRef.current.style['maxHeight'] = 'unset';
     }, []);
 
     const updateImgSize = useCallback(() => {
@@ -72,33 +79,44 @@ const EditArea = ({
 
         // console.log('prevW >>', prevW);
 
-        const { adjDeltaX, adjDeltaY } = applyRestrictions(
+        const displacement = applyRestrictions(new Displacement(
             (imgTranslation.current.x / prevW) * scaledWidth,
             (imgTranslation.current.y / prevH) * scaledHeight,
-            0,
-            0
-        );
+        ));
 
-        imgTranslation.current = {
-            x: adjDeltaX,
-            y: adjDeltaY
-        };
+        imgTranslation.current = displacement;
 
-        updateImgPosition(
-            imgTranslation.current.x,
-            imgTranslation.current.y
-        );
+        updateImgPosition(displacement);
+
+        // const { adjDeltaX, adjDeltaY } = applyRestrictions(
+        //     (imgTranslation.current.x / prevW) * scaledWidth,
+        //     (imgTranslation.current.y / prevH) * scaledHeight,
+        //     0,
+        //     0
+        // );
+
+        // imgTranslation.current = {
+        //     x: adjDeltaX,
+        //     y: adjDeltaY
+        // };
+
+        // updateImgPosition(
+        //     imgTranslation.current.x,
+        //     imgTranslation.current.y
+        // );
     }, []);
 
-    const updateImgPosition = useCallback((deltaX, deltaY) => {
-        imgRef.current.style['transform'] = `translate(${deltaX}px, ${deltaY}px)`;
+    const updateImgPosition = useCallback((displacement, event) => {
+        imgRef.current.style['transform'] = `translate(${displacement.x}px, ${displacement.y}px)`;
     }, []);
 
-    const applyRestrictions = useCallback((deltaX, deltaY, accumX, accumY) => {
-        let adjDeltaX = deltaX;
-        let adjDeltaY = deltaY;
-        const displacementX = accumX + deltaX;
-        const displacementY = accumY + deltaY;
+    const applyRestrictions = useCallback((displacement, deltaX, deltaY, accumX, accumY) => {
+        // let adjDeltaX = deltaX;
+        // let adjDeltaY = deltaY;
+        let adjustmentX = 0;
+        let adjustmentY = 0;
+        // const displacementX = accumX + deltaX;
+        // const displacementY = accumY + deltaY;
         const {
             left: shapeLeft,
             width: shapeWidth,
@@ -106,30 +124,31 @@ const EditArea = ({
             height: shapeHeight
         } = shapeRect.current;
 
-        console.log('accumX >> ', accumX);
-        console.log('deltaX >> ', deltaX);
-        console.log('imgRect.current.left >> ', imgRect.current.left);
+        // console.log('accumX >> ', accumX);
+        // console.log('deltaX >> ', deltaX);
+        // console.log('imgRect.current.left >> ', imgRect.current.left);
 
-        const imgLeft = imgRect.current.left + displacementX - (parseFloat(imgRef.current.style['width']) - imgRect.current.width) / 2;
+        const imgLeft = imgRect.current.left + displacement.x - (parseFloat(imgRef.current.style['width']) - imgRect.current.width) / 2;
         const imgRight = imgLeft + parseFloat(imgRef.current.style['width']);
 
-        const imgTop = imgRect.current.top + displacementY - (parseFloat(imgRef.current.style['height']) - imgRect.current.height) / 2;
+        const imgTop = imgRect.current.top + displacement.y - (parseFloat(imgRef.current.style['height']) - imgRect.current.height) / 2;
         const imgBottom = imgTop + parseFloat(imgRef.current.style['height']);
 
-        console.log('imgLeft >> ', imgLeft);
+        // console.log('imgLeft >> ', imgLeft);
         if (imgLeft > shapeLeft) {
-            adjDeltaX -= imgLeft - shapeLeft;
+            adjustmentX -= imgLeft - shapeLeft;
         } else if (imgRight < (shapeLeft + shapeWidth)) {
-            adjDeltaX -= imgRight - (shapeLeft + shapeWidth);
+            adjustmentX -= imgRight - (shapeLeft + shapeWidth);
         }
 
         if (imgTop > shapeTop) {
-            adjDeltaY -= imgTop - shapeTop;
+            adjustmentY -= imgTop - shapeTop;
         } else if (imgBottom < (shapeTop + shapeHeight)) {
-            adjDeltaY -= imgBottom - (shapeTop + shapeHeight);
+            adjustmentY -= imgBottom - (shapeTop + shapeHeight);
         }
 
-        return { adjDeltaX, adjDeltaY };
+        return new Displacement(displacement.x + adjustmentX, displacement.y + adjustmentY);
+        // return { adjDeltaX, adjDeltaY };
     }, []);
 
     const { handlePointerDown, handlePointerUp, handlePointerMove } = useDrag({

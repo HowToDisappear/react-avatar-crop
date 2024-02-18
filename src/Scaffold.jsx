@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import Cropper from './Cropper';
-import { Box, Slider } from '@mui/material';
 
 
 const Scaffold = () => {
@@ -33,10 +32,6 @@ const Scaffold = () => {
             >
                 Select
             </button>
-
-            <Box sx={{ width: '300px' }}>
-                <Slider aria-label="Volume" value={value} onChange={handleChange} />
-            </Box>
 
             <div className="user-wrapper-inner">
 

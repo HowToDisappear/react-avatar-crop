@@ -1,49 +1,36 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import useDrag from './useDrag';
+import { Displacement } from './common';
 
 
-const Range = ({ value, setValue, zoom = 1 }) => {
+const Range = ({ value, setValue }) => {
     const rangeRef = useRef(null);
     const rangeRect = useRef(null);
 
-    const pointerMoveCallback = useCallback((deltaX, deltaY) => {
-        setValue(((deltaX - rangeRect.current.left) / rangeRect.current.width) * 100);
+    const updateValue = useCallback((displacement, event) => {
+        setValue(((displacement.x - rangeRect.current.left) / rangeRect.current.width) * 100);
     }, []);
 
-    const pointerDownCallback = useCallback((initX, initY, accumDisplacement) => {
-        accumDisplacement.current.x = initX;
-        setValue(((initX - rangeRect.current.left) / rangeRect.current.width) * 100);
-    }, []);
-
-    const applyRestrictions = useCallback((deltaX, deltaY, accumX, accumY) => {
-        let adjDeltaX = deltaX;
-        const displacementX = accumX + deltaX;
+    const applyRestrictions = useCallback(displacement => {
+        let adjustmentX = 0;
         const { left: shapeLeft, width: shapeWidth } = rangeRect.current;
 
-        // const imgLeft = imgRect.current.left + displacementX;
-        // const imgRight = imgLeft + imgRect.current.width * zoom;
-
-        // const thumbPos = shapeLeft + shapeWidth * (value / 100) + displacementX;
-
-
-        // if (thumbPos < shapeLeft) {
-        //     adjDeltaX -= thumbPos - shapeLeft;
-        // } else if (thumbPos > (shapeLeft + shapeWidth)) {
-        //     adjDeltaX -= thumbPos - (shapeLeft + shapeWidth);
-        // }
-        if (displacementX < shapeLeft) {
-            adjDeltaX -= displacementX - shapeLeft;
-        } else if (displacementX > (shapeLeft + shapeWidth)) {
-            adjDeltaX -= displacementX - (shapeLeft + shapeWidth);
+        if (displacement.x < shapeLeft) {
+            adjustmentX -= displacement.x - shapeLeft;
+        } else if (displacement.x > (shapeLeft + shapeWidth)) {
+            adjustmentX -= displacement.x - (shapeLeft + shapeWidth);
         }
 
-        return { adjDeltaX };
+        return new Displacement(displacement.x + adjustmentX, 0);
     }, []);
 
     const { handlePointerDown, handlePointerUp, handlePointerMove } = useDrag({
-        pointerMoveCallback,
+        pointerDownCallback: updateValue,
+        pointerMoveCallback: updateValue,
         applyRestrictions: applyRestrictions,
-        pointerDownCallback,
+        options: {
+            updateOnPointerDown: true,
+        }
     });
 
     useEffect(() => {
@@ -67,14 +54,6 @@ const Range = ({ value, setValue, zoom = 1 }) => {
         <span
             className='cr-range-box'
             ref={rangeRef}
-            // onClick={evt => {
-            //     const { left, width } = rangeRef.current.getBoundingClientRect();
-            //     // console.log(evt);
-            //     let progr = Math.max(evt.clientX - left, 0) / width;
-            //     progr = Math.round(progr * 100);
-            //     console.log('progr >> ', progr);
-            //     setValue(progr);
-            // }}
         >
             <span className='cr-range-track'></span>
             <span className='cr-range-progress' style={{ width: `${value}%` }}></span>
