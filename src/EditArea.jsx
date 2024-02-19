@@ -71,13 +71,10 @@ const EditArea = ({
         const prevW = parseFloat(imgRef.current.style['width']) || width;
         const prevH = parseFloat(imgRef.current.style['height']) || height;
 
-
         imgRef.current.style['width'] = `${scaledWidth}px`;
         imgRef.current.style['height'] = `${scaledHeight}px`;
         imgRef.current.style['maxWidth'] = 'unset';
         imgRef.current.style['maxHeight'] = 'unset';
-
-        // console.log('prevW >>', prevW);
 
         const displacement = applyRestrictions(new Displacement(
             (imgTranslation.current.x / prevW) * scaledWidth,
@@ -87,36 +84,15 @@ const EditArea = ({
         imgTranslation.current = displacement;
 
         updateImgPosition(displacement);
-
-        // const { adjDeltaX, adjDeltaY } = applyRestrictions(
-        //     (imgTranslation.current.x / prevW) * scaledWidth,
-        //     (imgTranslation.current.y / prevH) * scaledHeight,
-        //     0,
-        //     0
-        // );
-
-        // imgTranslation.current = {
-        //     x: adjDeltaX,
-        //     y: adjDeltaY
-        // };
-
-        // updateImgPosition(
-        //     imgTranslation.current.x,
-        //     imgTranslation.current.y
-        // );
     }, []);
 
     const updateImgPosition = useCallback((displacement, event) => {
         imgRef.current.style['transform'] = `translate(${displacement.x}px, ${displacement.y}px)`;
     }, []);
 
-    const applyRestrictions = useCallback((displacement, deltaX, deltaY, accumX, accumY) => {
-        // let adjDeltaX = deltaX;
-        // let adjDeltaY = deltaY;
+    const applyRestrictions = useCallback(displacement => {
         let adjustmentX = 0;
         let adjustmentY = 0;
-        // const displacementX = accumX + deltaX;
-        // const displacementY = accumY + deltaY;
         const {
             left: shapeLeft,
             width: shapeWidth,
@@ -124,17 +100,12 @@ const EditArea = ({
             height: shapeHeight
         } = shapeRect.current;
 
-        // console.log('accumX >> ', accumX);
-        // console.log('deltaX >> ', deltaX);
-        // console.log('imgRect.current.left >> ', imgRect.current.left);
-
         const imgLeft = imgRect.current.left + displacement.x - (parseFloat(imgRef.current.style['width']) - imgRect.current.width) / 2;
         const imgRight = imgLeft + parseFloat(imgRef.current.style['width']);
 
         const imgTop = imgRect.current.top + displacement.y - (parseFloat(imgRef.current.style['height']) - imgRect.current.height) / 2;
         const imgBottom = imgTop + parseFloat(imgRef.current.style['height']);
 
-        // console.log('imgLeft >> ', imgLeft);
         if (imgLeft > shapeLeft) {
             adjustmentX -= imgLeft - shapeLeft;
         } else if (imgRight < (shapeLeft + shapeWidth)) {
@@ -148,7 +119,6 @@ const EditArea = ({
         }
 
         return new Displacement(displacement.x + adjustmentX, displacement.y + adjustmentY);
-        // return { adjDeltaX, adjDeltaY };
     }, []);
 
     const { handlePointerDown, handlePointerUp, handlePointerMove } = useDrag({

@@ -1,0 +1,1 @@
+drag bug: when dragging beyound container boundaries - behaviour is defferent for opposite sides

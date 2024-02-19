@@ -47,6 +47,8 @@ const Scaffold = () => {
                         height: '29vw',
                         width: '29vw',
                     }}
+                    settings={{
+                    }}
                 />
             </div>
         </div>
