@@ -7,18 +7,21 @@ import { Displacement } from './common';
 
 const EditArea = ({
     file,
-    onSave,
+    imgRef,
+    shapeRef,
     zoom = 1,
-    box = {},
-    shape = {
-        borderRadius: '40%',
-        height: '50%',
-        width: '50%',
-    },
+    styles = {
+        box: {},
+        shape: {
+            borderRadius: '40%',
+            height: '50%',
+            width: '50%',
+        },
+    }
 }) => {
     const boxRef = useRef(null);
-    const shapeRef = useRef(null);
-    const imgRef = useRef(null);
+    // const shapeRef = useRef(null);
+    // const imgRef = useRef(null);
 
     // Initial DOMRect of elements
     const boxRect = useRef(null);
@@ -38,7 +41,7 @@ const EditArea = ({
             const imgInitialWidth = shapeSide / (naturalHeight / naturalWidth);
             // console.log('boxWidth >> ', boxWidth);
             if (imgInitialWidth >= boxWidth) {
-                imgRef.current.style = `height: ${shape.height}`;
+                imgRef.current.style = `height: ${styles.shape.height}`;
             } else {
                 imgRef.current.style = 'max-width: 100%';
             }
@@ -47,7 +50,7 @@ const EditArea = ({
             const imgInitialHeight = shapeSide * (naturalHeight / naturalWidth);
 
             if (imgInitialHeight >= boxHeight) {
-                imgRef.current.style = `width: ${shape.width}`;
+                imgRef.current.style = `width: ${styles.shape.width}`;
             } else {
                 imgRef.current.style = 'max-height: 100%';
             }
@@ -164,14 +167,18 @@ const EditArea = ({
         <div
             className='cr-edit-box'
             ref={boxRef}
-            style={box}
+            style={styles.box}
         >
             <img
+                className='cr-img'
                 ref={imgRef}
                 draggable={false}
-                className='cr-img'
             />
-            <div className='cr-shape' style={shape} ref={shapeRef}>
+            <div
+                className='cr-shape'
+                ref={shapeRef}
+                style={styles.shape}
+            >
             </div>
         </div>
     );

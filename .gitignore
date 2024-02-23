@@ -4,3 +4,4 @@ node_modules/
 .next/
 junk
 package-lock.json
+issues.txt

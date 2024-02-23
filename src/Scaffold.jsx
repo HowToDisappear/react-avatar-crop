@@ -4,15 +4,19 @@ import Cropper from './Cropper';
 
 const Scaffold = () => {
     const fileInp = useRef(null);
-    const [userFile, setUserFile] = useState(null);
+    const targetImgRef = useRef(null);
+    const [sourceFile, setSourceFile] = useState(null);
+    const [targetFile, setTargetFile] = useState(null);
 
-    const [value, setValue] = useState(30);
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+    useEffect(() => {
+        if (targetFile) {
+            console.log('targetFile >> ', targetFile);
+            targetImgRef.current.src = URL.createObjectURL(targetFile);
+        }
+    }, [targetFile]);
 
-    console.log('userFile >> ', userFile);
+    console.log('sourceFile >> ', sourceFile);
     return (
         <div className="user-wrapper">
             <h3>Your image</h3>
@@ -23,7 +27,7 @@ const Scaffold = () => {
                 accept="image/*"
                 name="avatar"
                 ref={fileInp}
-                onChange={() => setUserFile(fileInp.current.files[0])}
+                onChange={() => setSourceFile(fileInp.current.files[0])}
             />
             {/* user's own button with callback attached */}
             <button
@@ -33,23 +37,36 @@ const Scaffold = () => {
                 Select
             </button>
 
+            <img
+                ref={targetImgRef}
+                height={200}
+                width={200}
+                style={{
+                    borderRadius: '30%',
+                    display: 'block',
+                    marginTop: '20px'
+                }}
+            />
+
             <div className="user-wrapper-inner">
 
                 <Cropper
-                    file={userFile}
-                    onSave={croppedFile => null}
+                    file={sourceFile}
+                    onSave={blob => setTargetFile(blob)}
+                    // preserveOriginalScale
                     box={{
                         width: '45vw',
                         height: '35vw',
                     }}
                     shape={{
                         borderRadius: '30%',
-                        height: '29vw',
-                        width: '29vw',
+                        height: '26vw',
+                        width: '26vw',
                     }}
                     settings={{
                     }}
                 />
+
             </div>
         </div>
     );
