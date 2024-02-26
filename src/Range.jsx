@@ -57,7 +57,7 @@ const Range = ({ value, setValue }) => {
         >
             <span className='cr-range-track'></span>
             <span className='cr-range-progress' style={{ width: `${value}%` }}></span>
-            <span className='cr-range-thumb'></span>
+            <span className='cr-range-thumb' style={{ left: `${value}%` }}></span>
             <input className='' type='range' hidden value={value} />
         </span>
     );
