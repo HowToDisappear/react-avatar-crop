@@ -3,7 +3,7 @@ import useDrag from './useDrag';
 import { Displacement } from './common';
 
 
-const Range = ({ value, setValue }) => {
+const Range = ({ value, setValue, options }) => {
     const rangeRef = useRef(null);
     const rangeRect = useRef(null);
 
@@ -52,13 +52,16 @@ const Range = ({ value, setValue }) => {
 
     return (
         <span
-            className='cr-range-box'
             ref={rangeRef}
+            className='cr-range-box'
+            style={{
+                color: options.color,
+            }}
         >
             <span className='cr-range-track'></span>
             <span className='cr-range-progress' style={{ width: `${value}%` }}></span>
             <span className='cr-range-thumb' style={{ left: `${value}%` }}></span>
-            <input className='' type='range' hidden value={value} />
+            <input className='' type='range' hidden value={value} readOnly />
         </span>
     );
 };

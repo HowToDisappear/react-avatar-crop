@@ -1,19 +1,27 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import Range from './Range';
 import EditArea from './EditArea';
 import WheelController from './WheelController';
+import { modifyCssLength } from './common';
+import ButtonsController from './ButtonsController';
 
 const defaultConfig = {
-    wheelController: true,
-    wheelControllerOptions: {
-        sensitivity: 5, // 1 to 10
-        min: 0,
-        max: 100,
+    shape: {
+        borderRadius: '50%',
     },
-    targetImageOptions: {
+    rangeControl: {
+        color: 'grey',
+    },
+    wheelControl: {
+        sensitivity: 5, // 1 to 10
+    },
+    buttonsControl: {
+        step: 3,
+    },
+    targetImage: {
         type: 'image/png',
         quality: 1, // 0 to 1
+        preserveOriginalScale: false,
     }
 };
 
@@ -21,34 +29,64 @@ const defaultConfig = {
 const Cropper = ({
     file,
     onSave,
-    box = {},
-    shape = {
-        borderRadius: '40%',
-        height: '50%',
-        width: '50%',
-    },
-    preserveOriginalScale,
-    settings = {},
+    saveButton,
+    box,
+    shape,
+    rangeControl,
+    wheelControl,
+    buttonsControl,
+    targetImage,
 }) => {
     const shapeRef = useRef(null);
     const imgRef = useRef(null);
     const canvasRef = useRef(null);
-    // const canvasContext = useRef(null);
     const [zoom, setZoom] = useState(0);
 
-    const config = useMemo(() => ({
-        ...defaultConfig,
-        ...settings,
-        wheelControllerOptions: {
-            ...defaultConfig.wheelControllerOptions,
-            ...(settings.wheelControllerOptions ?? {})
-        },
-        targetImageOptions: {
-            ...defaultConfig.targetImageOptions,
-            ...(settings.targetImageOptions ?? {})
-        }
-    }), [defaultConfig, settings]);
+    const config = useMemo(() => {
+        const shapeDefaultSide = modifyCssLength(
+            (parseFloat(box.width) > parseFloat(box.height)
+                ? box.height
+                : box.width),
+            val => val * 0.9
+        );
+        return ({
+            ...defaultConfig,
+            box,
+            shape: {
+                ...defaultConfig.shape,
+                height: shapeDefaultSide,
+                width: shapeDefaultSide,
+                ...((typeof shape === 'object') && shape)
+            },
+            rangeControl: (Boolean(rangeControl) && {
+                ...defaultConfig.rangeControl,
+                ...((typeof rangeControl === 'object') && rangeControl)
+            }),
+            wheelControl: (Boolean(wheelControl) && {
+                ...defaultConfig.wheelControl,
+                ...((typeof wheelControl === 'object') && wheelControl)
+            }),
+            buttonsControl: (Boolean(buttonsControl) && {
+                ...defaultConfig.buttonsControl,
+                ...((typeof buttonsControl === 'object') && buttonsControl)
+            }),
+            targetImage: {
+                ...defaultConfig.targetImage,
+                ...((typeof targetImage === 'object') && targetImage)
+            }
+        });
+    }, [
+        defaultConfig,
+        box,
+        shape,
+        rangeControl,
+        wheelControl,
+        buttonsControl,
+        targetImage,
+    ]);
 
+
+    // move this callback to hook?
     const cropArea = useCallback(() => {
         const imgRect = imgRef.current.getBoundingClientRect();
         const shapeRect = shapeRef.current.getBoundingClientRect();
@@ -59,66 +97,89 @@ const Cropper = ({
         const sWidth = shapeRect.width * scaleFactor;
         const sHeight = shapeRect.height * scaleFactor;
 
-        const dWidth = preserveOriginalScale ? sWidth : shapeRect.width;
-        const dHeight = preserveOriginalScale ? sHeight : shapeRect.height;
+        const dWidth = config.targetImage.preserveOriginalScale ? sWidth : shapeRect.width;
+        const dHeight = config.targetImage.preserveOriginalScale ? sHeight : shapeRect.height;
 
         canvasRef.current.setAttribute('width', `${dWidth}px`);
         canvasRef.current.setAttribute('height', `${dHeight}px`);
         const ctx = canvasRef.current.getContext('2d');
         ctx.drawImage(imgRef.current, sx, sy, sWidth, sHeight, 0, 0, dWidth, dHeight);
-    }, [preserveOriginalScale]);
+    }, [config]);
 
     const handleSave = useCallback(() => {
         cropArea();
         canvasRef.current.toBlob(
             blob => onSave(blob),
-            config.targetImageOptions.type,
-            config.targetImageOptions.quality
+            config.targetImage.type,
+            config.targetImage.quality
         );
-    }, [cropArea, onSave]);
+    }, [cropArea, onSave, config]);
+
+    useEffect(() => {
+        if (!saveButton) {
+            return;
+        }
+        saveButton.current.onclick = handleSave;
+    }, [handleSave]);
 
     if (!file) {
         return null;
     }
 
+    if (!onSave) {
+        console.error("You must provide onSave callback");
+        return null;
+    }
+
+    if (!saveButton) {
+        console.error("You must provide saveButton prop");
+        return null;
+    }
+
+    if (!box) {
+        console.error("You must provide box prop");
+        return null;
+    }
+
     const element = (
-        <div className='cr-layer'>
-            <div className='cr-edit-layer'>
-                <div
-                    // ref={containerRef}
-                    className='cr-container'
-                    style={{ width: box.width }}
-                >
-                    <EditArea
-                        file={file}
-                        imgRef={imgRef}
-                        shapeRef={shapeRef}
-                        zoom={zoom}
-                        styles={{
-                            box,
-                            shape,
-                        }}
-                    />
-                    <Range value={zoom} setValue={setZoom} />
-                    {config.wheelController &&
-                        <WheelController
-                            setValue={setZoom}
-                            options={config.wheelControllerOptions}
-                        />}
-                    <button
-                        onClick={handleSave}
-                    >
-                        Save
-                    </button>
-                </div>
-            </div>
+        <div
+            // ref={containerRef}
+            className='cr-container'
+            style={{ width: config.box.width }}
+        >
+            <EditArea
+                file={file}
+                imgRef={imgRef}
+                shapeRef={shapeRef}
+                zoom={zoom}
+                styles={{
+                    box: config.box,
+                    shape: config.shape,
+                }}
+            />
+            {Boolean(config.rangeControl) &&
+                <Range
+                    value={zoom}
+                    setValue={setZoom}
+                    options={config.rangeControl}
+                />}
+            {Boolean(config.wheelControl) &&
+                <WheelController
+                    setValue={setZoom}
+                    options={config.wheelControl}
+                />}
+            {Boolean(config.buttonsControl) &&
+                <ButtonsController
+                    setValue={setZoom}
+                    options={config.buttonsControl}
+                />}
         </div>
     );
 
-    // console.log('render -- ', preserveOriginalSize);
+    // console.log('config -- ', config);
     return (
         <>
-            {createPortal(element, document.body)}
+            {element}
             <canvas ref={canvasRef} hidden></canvas>
         </>
     );

@@ -9,19 +9,10 @@ const EditArea = ({
     file,
     imgRef,
     shapeRef,
-    zoom = 1,
-    styles = {
-        box: {},
-        shape: {
-            borderRadius: '40%',
-            height: '50%',
-            width: '50%',
-        },
-    }
+    zoom,
+    styles
 }) => {
     const boxRef = useRef(null);
-    // const shapeRef = useRef(null);
-    // const imgRef = useRef(null);
 
     // Initial DOMRect of elements
     const boxRect = useRef(null);
@@ -149,13 +140,11 @@ const EditArea = ({
     }, []);
 
     useEffect(() => {
-        // console.log('** mounting listeners **');
         imgRef.current.addEventListener('load', handleImgLoad);
         imgRef.current.addEventListener('pointerdown', handlePointerDown);
         window.addEventListener('pointerup', handlePointerUp);
         window.addEventListener('pointermove', handlePointerMove);
         return () => {
-            // console.log('** un-mounting listeners **');
             imgRef.current.removeEventListener('load', handleImgLoad);
             imgRef.current.removeEventListener('pointerdown', handlePointerDown);
             window.removeEventListener('pointerup', handlePointerUp);

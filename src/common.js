@@ -6,4 +6,9 @@ class Displacement {
     }
 }
 
-export { Displacement };
+const modifyCssLength = (value, operation) => {
+    const numValue = CSSNumericValue.parse(value);
+    return operation(numValue.value) + numValue.unit;
+};
+
+export { Displacement, modifyCssLength };

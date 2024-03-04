@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import Cropper from './Cropper';
+import { Dialog, DialogActions, DialogContent } from '@mui/material';
 
 
 const Scaffold = () => {
     const fileInp = useRef(null);
     const targetImgRef = useRef(null);
+    const saveBtnRef = useRef(null);
+    const zoomInRef = useRef(null);
+    const zoomOutRef = useRef(null);
     const [sourceFile, setSourceFile] = useState(null);
     const [targetFile, setTargetFile] = useState(null);
 
@@ -29,7 +33,6 @@ const Scaffold = () => {
                 ref={fileInp}
                 onChange={() => setSourceFile(fileInp.current.files[0])}
             />
-            {/* user's own button with callback attached */}
             <button
                 id='user-btn'
                 onClick={() => fileInp.current.click()}
@@ -39,34 +42,60 @@ const Scaffold = () => {
 
             <img
                 ref={targetImgRef}
-                height={200}
-                width={200}
                 style={{
-                    borderRadius: '30%',
+                    // borderRadius: '30%',
                     display: 'block',
                     marginTop: '20px'
                 }}
             />
 
             <div className="user-wrapper-inner">
+                <Dialog
+                    open={!!sourceFile}
+                    // TransitionComponent={Transition}
+                    keepMounted
+                    // onClose={handleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogContent>
+                        <Cropper
+                            file={sourceFile}
+                            onSave={blob => setTargetFile(blob)}
+                            saveButton={saveBtnRef}
+                            box={{
+                                width: '500px',
+                                height: '400px',
+                            }}
+                            shape={{
+                                borderRadius: '30%',
+                            }}
+                            rangeControl={{
+                                // color: 'green',
+                                // width: '60%',
+                            }}
+                            wheelControl
+                            // buttonsControl={{
+                            //     zoomInControl: zoomInRef,
+                            //     zoomOutControl: zoomOutRef,
+                            // }}
+                            // targetImage={{
+                            //     preserveOriginalScale: true,
+                            // }}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <button ref={saveBtnRef} type='button'>
+                            Save!
+                        </button>
 
-                <Cropper
-                    file={sourceFile}
-                    onSave={blob => setTargetFile(blob)}
-                    // preserveOriginalScale
-                    box={{
-                        width: '45vw',
-                        height: '35vw',
-                    }}
-                    shape={{
-                        borderRadius: '30%',
-                        height: '26vw',
-                        width: '26vw',
-                    }}
-                    settings={{
-                    }}
-                />
-
+                        <button ref={zoomInRef} type='button'>
+                            +
+                        </button>
+                        <button ref={zoomOutRef} type='button'>
+                            -
+                        </button>
+                    </DialogActions>
+                </Dialog>
             </div>
         </div>
     );
