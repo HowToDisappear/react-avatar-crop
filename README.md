@@ -1,11 +1,11 @@
 # react-avatar-crop
 ---
-```
 A lightweght react avatar cropper.
-```
 
 ## Installation
-`npm install react-avatar-crop`
+```
+npm install react-avatar-crop
+```
 
 ## Usage
 
