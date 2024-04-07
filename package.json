@@ -1,14 +1,49 @@
 {
-  "scripts": {
-    "dev": "next dev"
+  "name": "react-avatar-crop",
+  "version": "0.1.0",
+  "description": "Lightweight avatar cropper",
+  "homepage": "https://github.com/HowToDisappear/react-avatar-easy-cropper#readme",
+  "author": "Nikita Veremchuk",
+  "keywords": [
+    "image",
+    "avatar",
+    "crop",
+    "cropper",
+    "react"
+  ],
+  "license": "MIT",
+  "main": "dist/main.bundle.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HowToDisappear/react-avatar-easy-cropper.git"
   },
-  "dependencies": {
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.15.11",
-    "next": "^13.4.19",
+  "bugs": {
+    "url": "https://github.com/HowToDisappear/react-avatar-easy-cropper/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --env environment=production",
+    "dev": "webpack serve --open --env environment=development"
+  },
+  "exports": {
+    ".": "./dist/main.bundle.js",
+    "./css": "./dist/main.css"
+  },
+  "peerDependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "sass": "^1.66.1"
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-react": "^7.24.1",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.6.0",
+    "mini-css-extract-plugin": "^2.8.1",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
   }
 }

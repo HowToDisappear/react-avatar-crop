@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import Range from './Range';
-import useDrag from './useDrag';
-import { Displacement } from './common';
+import useDrag from '../hooks/useDrag';
+import { Displacement } from '../utils/utils';
 
 
 const EditArea = ({

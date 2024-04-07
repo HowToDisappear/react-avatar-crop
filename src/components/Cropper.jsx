@@ -2,8 +2,9 @@ import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Range from './Range';
 import EditArea from './EditArea';
 import WheelController from './WheelController';
-import { modifyCssLength } from './common';
+import { modifyCssLength } from '../utils/utils';
 import ButtonsController from './ButtonsController';
+import '../styles/index.css';
 
 const defaultConfig = {
     shape: {
@@ -116,7 +117,7 @@ const Cropper = ({
     }, [cropArea, onSave, config]);
 
     useEffect(() => {
-        if (!saveButton) {
+        if (!saveButton || !saveButton.current) {
             return;
         }
         saveButton.current.onclick = handleSave;
@@ -176,6 +177,7 @@ const Cropper = ({
         </div>
     );
 
+    console.log('** Cropper **');
     // console.log('config -- ', config);
     return (
         <>

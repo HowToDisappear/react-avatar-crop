@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import useDrag from './useDrag';
-import { Displacement } from './common';
+import useDrag from '../hooks/useDrag';
+import { Displacement } from '../utils/utils';
 
 
 const Range = ({ value, setValue, options }) => {

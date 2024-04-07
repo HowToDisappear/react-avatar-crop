@@ -1,5 +1,5 @@
 import { useRef, useCallback } from 'react';
-import { Displacement } from './common';
+import { Displacement } from '../utils/utils';
 
 
 const useDrag = ({
