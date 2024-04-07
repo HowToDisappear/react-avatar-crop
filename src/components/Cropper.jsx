@@ -177,8 +177,6 @@ const Cropper = ({
         </div>
     );
 
-    console.log('** Cropper **');
-    // console.log('config -- ', config);
     return (
         <>
             {element}

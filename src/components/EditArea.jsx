@@ -30,7 +30,6 @@ const EditArea = ({
         if (naturalWidth > naturalHeight) {
             const { width: boxWidth } = boxRect.current;
             const imgInitialWidth = shapeSide / (naturalHeight / naturalWidth);
-            // console.log('boxWidth >> ', boxWidth);
             if (imgInitialWidth >= boxWidth) {
                 imgRef.current.style = `height: ${styles.shape.height}`;
             } else {

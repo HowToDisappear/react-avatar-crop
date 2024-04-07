@@ -38,12 +38,10 @@ const Range = ({ value, setValue, options }) => {
     }, []);
 
     useEffect(() => {
-        // console.log('** mounting listeners **');
         rangeRef.current.addEventListener('pointerdown', handlePointerDown);
         window.addEventListener('pointerup', handlePointerUp);
         window.addEventListener('pointermove', handlePointerMove);
         return () => {
-            // console.log('** un-mounting listeners **');
             rangeRef.current.removeEventListener('pointerdown', handlePointerDown);
             window.removeEventListener('pointerup', handlePointerUp);
             window.removeEventListener('pointermove', handlePointerMove);
