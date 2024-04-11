@@ -4,7 +4,8 @@ import EditArea from './EditArea';
 import WheelController from './WheelController';
 import { modifyCssLength } from '../utils/utils';
 import ButtonsController from './ButtonsController';
-import '../styles/index.css';
+// import '../styles/index.css';
+import style from '../styles/cropper.css';
 
 const defaultConfig = {
     shape: {
@@ -145,7 +146,7 @@ const Cropper = ({
     const element = (
         <div
             // ref={containerRef}
-            className='cr-container'
+            className={style.cr_container}
             style={{ width: config.box.width }}
         >
             <EditArea

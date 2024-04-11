@@ -1,16 +1,16 @@
 
-.cr-range-box {
+.cr_range_box {
     position: relative;
     display: inline-block;
     width: 100%;
-    color: #E61E4D;
+    color: grey;
     height: 4px;
     border-radius: 12px;
     padding: 20px 0;
     cursor: pointer;
 }
 
-.cr-range-track {
+.cr_range_track {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -21,7 +21,7 @@
     opacity: 0.4;
 }
 
-.cr-range-progress {
+.cr_range_progress {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -31,7 +31,7 @@
     border: 1px solid currentColor;
 }
 
-.cr-range-thumb {
+.cr_range_thumb {
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);

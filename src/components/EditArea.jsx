@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import Range from './Range';
 import useDrag from '../hooks/useDrag';
 import { Displacement } from '../utils/utils';
-
+import style from '../styles/cropper.css';
 
 const EditArea = ({
     file,
@@ -153,17 +153,17 @@ const EditArea = ({
 
     return (
         <div
-            className='cr-edit-box'
+            className={style.cr_edit_box}
             ref={boxRef}
             style={styles.box}
         >
             <img
-                className='cr-img'
+                className={style.cr_img}
                 ref={imgRef}
                 draggable={false}
             />
             <div
-                className='cr-shape'
+                className={style.cr_shape}
                 ref={shapeRef}
                 style={styles.shape}
             >

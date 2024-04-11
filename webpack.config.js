@@ -7,7 +7,7 @@ module.exports = env => {
     const isProduction = environment === 'production';
     return {
         mode: environment,
-        entry: './src/index.js',
+        entry: isProduction ? './src/index.js' : './public/index.js',
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: '[name].bundle.js',
@@ -43,11 +43,14 @@ module.exports = env => {
                 {
                     test: /\.css$/i,
                     use: [
-                        (isProduction
-                            ? MiniCssExtractPlugin.loader
-                            : 'style-loader'
-                        ),
-                        'css-loader'
+                        // { loader: 'style-loader' },
+                        { loader: MiniCssExtractPlugin.loader },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                modules: true,
+                            },
+                        }
                     ],
                 }
             ]
@@ -55,7 +58,7 @@ module.exports = env => {
         plugins: [
             ...(isProduction
                 ? [new MiniCssExtractPlugin()]
-                : [new HtmlWebpackPlugin()]
+                : [new MiniCssExtractPlugin(), new HtmlWebpackPlugin()]
             ),
         ],
         externals: (isProduction

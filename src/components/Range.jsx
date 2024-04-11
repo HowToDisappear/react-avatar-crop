@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import useDrag from '../hooks/useDrag';
 import { Displacement } from '../utils/utils';
+import style from '../styles/range.css';
 
 
 const Range = ({ value, setValue, options }) => {
@@ -51,15 +52,15 @@ const Range = ({ value, setValue, options }) => {
     return (
         <span
             ref={rangeRef}
-            className='cr-range-box'
+            className={style.cr_range_box}
             style={{
                 color: options.color,
             }}
         >
-            <span className='cr-range-track'></span>
-            <span className='cr-range-progress' style={{ width: `${value}%` }}></span>
-            <span className='cr-range-thumb' style={{ left: `${value}%` }}></span>
-            <input className='' type='range' hidden value={value} readOnly />
+            <span className={style.cr_range_track}></span>
+            <span className={style.cr_range_progress} style={{ width: `${value}%` }}></span>
+            <span className={style.cr_range_thumb} style={{ left: `${value}%` }}></span>
+            <input type='range' hidden value={value} readOnly />
         </span>
     );
 };

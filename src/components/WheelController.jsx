@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-
+import style from '../styles/cropper.css';
 
 const WheelController = ({ setValue, options }) => {
     useEffect(() => {
@@ -9,7 +9,7 @@ const WheelController = ({ setValue, options }) => {
                 Math.min(Math.max(value + evt.deltaY * -(options.sensitivity / 100), 0), 100)
             ));
         };
-        const node = document.querySelector(".cr-container");
+        const node = document.querySelector(`.${style.cr_container}`);
         node.addEventListener('wheel', updateValue);
         return () => node.removeEventListener('wheel', updateValue);
     }, []);
