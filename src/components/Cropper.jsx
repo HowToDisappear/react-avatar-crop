@@ -11,6 +11,10 @@ const defaultConfig = {
     shape: {
         borderRadius: '50%',
     },
+    layer: {
+        dim: '40%',
+        dimTransition: '1.5s',
+    },
     rangeControl: {
         color: 'grey',
     },
@@ -34,6 +38,7 @@ const Cropper = ({
     saveButton,
     box,
     shape,
+    layer,
     rangeControl,
     wheelControl,
     buttonsControl,
@@ -59,6 +64,10 @@ const Cropper = ({
                 height: shapeDefaultSide,
                 width: shapeDefaultSide,
                 ...((typeof shape === 'object') && shape)
+            },
+            layer: {
+                ...defaultConfig.layer,
+                ...((typeof shape === 'object') && layer)
             },
             rangeControl: (Boolean(rangeControl) && {
                 ...defaultConfig.rangeControl,
@@ -157,6 +166,7 @@ const Cropper = ({
                 styles={{
                     box: config.box,
                     shape: config.shape,
+                    layer: config.layer,
                 }}
             />
             {Boolean(config.rangeControl) &&

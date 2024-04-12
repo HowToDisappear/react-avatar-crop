@@ -1,5 +1,7 @@
 .cr_container {
     position: relative;
+
+    --shape-border: 2px;
 }
 
 .cr_edit_box {
@@ -8,7 +10,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: lightblue;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
 .cr_img {
@@ -22,5 +26,23 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 2px solid white;
+    border: var(--shape-border) solid white;
+
+    --layer-radius: 0%;
+    --layer-dim: 0%;
+    --layer-dim-transition: 0;
+}
+
+.cr_shape:after {
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--shape-border));
+    bottom: 0;
+    left: calc(-1 * var(--shape-border));
+    right: 0;
+    border-radius: var(--layer-radius);
+    width: calc(100% + var(--shape-border) * 2);
+    height: calc(100% + var(--shape-border) * 2);
+    box-shadow: 0px 0px 0px 1600px rgb(0 0 0 / var(--layer-dim));
+    transition: box-shadow var(--layer-dim-transition) ease;
 }

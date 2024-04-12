@@ -53,6 +53,7 @@ const EditArea = ({
         imgRef.current.style['height'] = `${imgRect.current.height}px`;
         imgRef.current.style['maxWidth'] = 'unset';
         imgRef.current.style['maxHeight'] = 'unset';
+        boxRef.current.style['opacity'] = '1';
     }, []);
 
     const updateImgSize = useCallback(() => {
@@ -149,6 +150,12 @@ const EditArea = ({
             window.removeEventListener('pointerup', handlePointerUp);
             window.removeEventListener('pointermove', handlePointerMove);
         };
+    }, []);
+
+    useEffect(() => {
+        shapeRef.current.style.setProperty('--layer-radius', styles.shape.borderRadius);
+        shapeRef.current.style.setProperty('--layer-dim', styles.layer.dim);
+        shapeRef.current.style.setProperty('--layer-dim-transition', styles.layer.dimTransition);
     }, []);
 
     return (
