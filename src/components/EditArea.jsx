@@ -4,12 +4,15 @@ import Range from './Range';
 import useDrag from '../hooks/useDrag';
 import { Displacement } from '../utils/utils';
 import style from '../styles/cropper.css';
+import usePinchZoom from '../hooks/usePinchZoom';
 
 const EditArea = ({
     file,
     imgRef,
     shapeRef,
     zoom,
+    setZoom,
+    pinchZoomOptions,
     styles
 }) => {
     const boxRef = useRef(null);
@@ -56,6 +59,10 @@ const EditArea = ({
         boxRef.current.style['opacity'] = '1';
     }, []);
 
+    const updateImgPosition = useCallback((displacement, event) => {
+        imgRef.current.style['transform'] = `translate(${displacement.x}px, ${displacement.y}px)`;
+    }, []);
+
     const updateImgSize = useCallback(() => {
         const { naturalWidth, naturalHeight } = imgRef.current;
         const { width, height } = imgRect.current;
@@ -78,10 +85,6 @@ const EditArea = ({
         imgTranslation.current = displacement;
 
         updateImgPosition(displacement);
-    }, []);
-
-    const updateImgPosition = useCallback((displacement, event) => {
-        imgRef.current.style['transform'] = `translate(${displacement.x}px, ${displacement.y}px)`;
     }, []);
 
     const applyRestrictions = useCallback(displacement => {
@@ -121,6 +124,13 @@ const EditArea = ({
         refProp: imgTranslation,
     });
 
+    const { onPointerDown, onPointerUp, onPointerMove } = usePinchZoom({
+        handlePointerDown,
+        handlePointerUp,
+        handlePointerMove,
+        setZoom,
+        pinchZoomOptions
+    });
 
     useEffect(() => {
         if (!imgRect.current) {
@@ -141,14 +151,16 @@ const EditArea = ({
 
     useEffect(() => {
         imgRef.current.addEventListener('load', handleImgLoad);
-        imgRef.current.addEventListener('pointerdown', handlePointerDown);
-        window.addEventListener('pointerup', handlePointerUp);
-        window.addEventListener('pointermove', handlePointerMove);
+        imgRef.current.addEventListener('pointerdown', onPointerDown);
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointercancel', onPointerUp);
         return () => {
             imgRef.current.removeEventListener('load', handleImgLoad);
-            imgRef.current.removeEventListener('pointerdown', handlePointerDown);
-            window.removeEventListener('pointerup', handlePointerUp);
-            window.removeEventListener('pointermove', handlePointerMove);
+            imgRef.current.removeEventListener('pointerdown', onPointerDown);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointercancel', onPointerUp);
         };
     }, []);
 

@@ -24,6 +24,9 @@ const defaultConfig = {
     buttonsControl: {
         step: 3,
     },
+    pinchZoom: {
+        sensitivity: 3,
+    },
     targetImage: {
         type: 'image/png',
         quality: 1, // 0 to 1
@@ -41,6 +44,7 @@ const Cropper = ({
     layer,
     rangeControl,
     wheelControl,
+    pinchZoom,
     buttonsControl,
     targetImage,
 }) => {
@@ -73,10 +77,14 @@ const Cropper = ({
                 ...defaultConfig.rangeControl,
                 ...((typeof rangeControl === 'object') && rangeControl)
             }),
-            wheelControl: (Boolean(wheelControl) && {
+            wheelControl: {
                 ...defaultConfig.wheelControl,
                 ...((typeof wheelControl === 'object') && wheelControl)
-            }),
+            },
+            pinchZoom: {
+                ...defaultConfig.pinchZoom,
+                ...((typeof pinchZoom === 'object') && pinchZoom)
+            },
             buttonsControl: (Boolean(buttonsControl) && {
                 ...defaultConfig.buttonsControl,
                 ...((typeof buttonsControl === 'object') && buttonsControl)
@@ -96,8 +104,6 @@ const Cropper = ({
         targetImage,
     ]);
 
-
-    // move this callback to hook?
     const cropArea = useCallback(() => {
         const imgRect = imgRef.current.getBoundingClientRect();
         const shapeRect = shapeRef.current.getBoundingClientRect();
@@ -163,6 +169,8 @@ const Cropper = ({
                 imgRef={imgRef}
                 shapeRef={shapeRef}
                 zoom={zoom}
+                setZoom={setZoom}
+                pinchZoomOptions={config.pinchZoom}
                 styles={{
                     box: config.box,
                     shape: config.shape,
