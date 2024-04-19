@@ -1,6 +1,6 @@
 # react-avatar-crop
----
-A lightweght react avatar cropper.
+A lightweight, customizable, non-intrusive image cropper for using on the frontend. Its primary purpose is to enable end users to crop avatar/ profile images that they uploaded via input. With an intuitive design, it ensures a seamless and user-friendly experience.
+The package has no external dependencies and has a minimal footprint. It works seamlessly on both desktop and mobile devices, providing a consistent experience across platforms. Cropper requires the consuming project to have React installed.
 
 ## Installation
 ```
@@ -84,14 +84,16 @@ const Example = () => {
 ```
 
 ## API
-| Name           | Type           | Required | Default                                                       | Description                                                                |
-|----------------|----------------|----------|---------------------------------------------------------------|----------------------------------------------------------------------------|
-| file           | File           | yes      |                                                               | Input file selected by user                                                |
-| onSave         | func           | yes      |                                                               | Handler provided with resulting blob                                       |
-| saveButton     | ref            | yes      |                                                               | Ref to a button that will have save handler attached to                    |
-| box            | object         | yes      |                                                               | Cropper element width and height                                           |
-| shape          | object         |          | {borderRadius: '50%'}                                         | Crop area width, height and border-radius                                  |
-| rangeControl   | bool \| object |          | {color: 'grey'}                                               | Range widget bool to include and object provides options such as color     |
-| wheelControl   | bool \| object |          | {sensitivity: 5}                                              | Wheel controller to enable and object provides options such as sensitivity |
-| buttonsControl | object         |          | {step: 3}                                                     | Refs for zoomInControl, zoomOutControl and step (1 to 10)                  |
-| targetImage    | object         |          | {type: 'image/png', quality: 1, preserveOriginalScale: false} | Config for target image                                                    |
+| Name | Type | Required | Default | Description |
+|---|---|---|---|---|
+| file | blob | yes |  | Input file selected by user |
+| onSave | func | yes |  | Handles cropped image blob, e.g. uploads to a server |
+| saveButton | ref | yes |  | Ref to a button, onSave will be attached to it |
+| box | object | yes |  | Cropper element width and height |
+| shape | object |  | `{ borderRadius: '50%' }` | Crop area width, height and border-radius |
+| layer | object |  | `{ dim: '40%', dimTransition: '1.5s' }` | Layer around crop area |
+| rangeControl | bool \| object |  | `{ color: 'grey' }` | Range widget |
+| wheelControl | bool \| object |  | `{ sensitivity: 5 }` | Allows mouse wheel and trackpad zoom |
+| pinchZoom | object |  | `{ sensitivity: 3 }` | Allows touch screen devices pinch zoom |
+| buttonsControl | object |  | `{ step: 3 }` | Refs to zoomInControl, zoomOutControl and step size (1 to 10) |
+| targetImage | object |  | `{ type: 'image/png', quality: 1, preserveOriginalScale: false }` | Config for target image |
