@@ -56,6 +56,8 @@ const EditArea = ({
         imgRef.current.style['height'] = `${imgRect.current.height}px`;
         imgRef.current.style['maxWidth'] = 'unset';
         imgRef.current.style['maxHeight'] = 'unset';
+
+        imgRef.current.classList.add(style.cr_img_visible);
         boxRef.current.style['opacity'] = '1';
     }, []);
 
@@ -118,6 +120,11 @@ const EditArea = ({
         return new Displacement(displacement.x + adjustmentX, displacement.y + adjustmentY);
     }, []);
 
+    const resetState = useCallback(() => {
+        imgTranslation.current = new Displacement(0, 0);
+        setZoom(0);
+    }, [setZoom]);
+
     const { handlePointerDown, handlePointerUp, handlePointerMove } = useDrag({
         pointerMoveCallback: updateImgPosition,
         applyRestrictions: applyRestrictions,
@@ -141,8 +148,10 @@ const EditArea = ({
     }, [zoom]);
 
     useEffect(() => {
+        imgRef.current.classList.remove(style.cr_img_visible);
+        resetState();
         imgRef.current.src = URL.createObjectURL(file);
-    }, [file]);
+    }, [file, resetState]);
 
     useEffect(() => {
         boxRect.current = boxRef.current.getBoundingClientRect();

@@ -18,6 +18,12 @@
 
 .cr_img {
     position: relative;
+    opacity: 0;
+}
+
+.cr_img_visible {
+    opacity: 1;
+    transition: opacity 0.2s ease;
 }
 
 .cr_shape {
