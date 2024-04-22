@@ -9,9 +9,9 @@ const WheelController = ({ setValue, options }) => {
                 Math.min(Math.max(value + evt.deltaY * -(options.sensitivity / 100), 0), 100)
             ));
         };
-        const node = document.querySelector(`.${style.cr_container}`);
-        node.addEventListener('wheel', updateValue);
-        return () => node.removeEventListener('wheel', updateValue);
+        const container = document.querySelector(`.${style.cr_container}`);
+        container.addEventListener('wheel', updateValue);
+        return () => container?.removeEventListener('wheel', updateValue);
     }, []);
     return null;
 };

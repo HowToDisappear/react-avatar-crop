@@ -156,8 +156,8 @@ const EditArea = ({
         window.addEventListener('pointermove', onPointerMove);
         window.addEventListener('pointercancel', onPointerUp);
         return () => {
-            imgRef.current.removeEventListener('load', handleImgLoad);
-            imgRef.current.removeEventListener('pointerdown', onPointerDown);
+            imgRef.current?.removeEventListener('load', handleImgLoad);
+            imgRef.current?.removeEventListener('pointerdown', onPointerDown);
             window.removeEventListener('pointerup', onPointerUp);
             window.removeEventListener('pointermove', onPointerMove);
             window.removeEventListener('pointercancel', onPointerUp);

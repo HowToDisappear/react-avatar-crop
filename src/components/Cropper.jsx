@@ -71,7 +71,7 @@ const Cropper = ({
             },
             layer: {
                 ...defaultConfig.layer,
-                ...((typeof shape === 'object') && layer)
+                ...((typeof layer === 'object') && layer)
             },
             rangeControl: (Boolean(rangeControl) && {
                 ...defaultConfig.rangeControl,

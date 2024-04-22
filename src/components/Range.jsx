@@ -43,7 +43,7 @@ const Range = ({ value, setValue, options }) => {
         window.addEventListener('pointerup', handlePointerUp);
         window.addEventListener('pointermove', handlePointerMove);
         return () => {
-            rangeRef.current.removeEventListener('pointerdown', handlePointerDown);
+            rangeRef.current?.removeEventListener('pointerdown', handlePointerDown);
             window.removeEventListener('pointerup', handlePointerUp);
             window.removeEventListener('pointermove', handlePointerMove);
         };
