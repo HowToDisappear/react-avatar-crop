@@ -1,4 +1,5 @@
 # react-avatar-crop
+![example1](https://github.com/HowToDisappear/react-avatar-crop/assets/60031509/a8a0350c-ab29-401c-8dc0-c6e9e0ec0ccf)
 A lightweight, customizable, non-intrusive image cropper for using on the frontend. Its primary purpose is to enable end users to crop avatar/ profile images that they uploaded via input. With an intuitive design, it ensures a seamless and user-friendly experience.
 The package has no external dependencies and has a minimal footprint. It works seamlessly on both desktop and mobile devices, providing a consistent experience across platforms. Cropper requires the consuming project to have React installed.
 
